@@ -4,8 +4,8 @@
     "date": "2026-05-28",
     "geometry": {
       "coordinates": [
-        153.238,
-        48.089999999999996
+        153.263,
+        48.059000000000005
       ],
       "type": "Point"
     },
@@ -13,8 +13,8 @@
     "notes": "【サンプルデータ／SAMPLE】1 件の熱異常検知（松輪島 再建飛行場・基地）。最大FRP 12.0 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
-      "query": "area=153.14,48.01,153.32,48.15 date=2026-05-28",
-      "retrieved_at": "2026-06-08T16:09:23Z",
+      "query": "area=153.195,48.011,153.315,48.091 date=2026-05-28",
+      "retrieved_at": "2026-06-08T16:55:03Z",
       "source": "firms"
     },
     "raw": {
@@ -25,8 +25,8 @@
           "confidence": "n",
           "daynight": "N",
           "frp": 12.0,
-          "lat": 48.089999999999996,
-          "lon": 153.238,
+          "lat": 48.059000000000005,
+          "lon": 153.263,
           "product": "VIIRS_SNPP_NRT"
         }
       ],
@@ -36,7 +36,7 @@
       ]
     },
     "signal_strength": 0.384,
-    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-05-28;@153.2380,48.0900,10z",
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-05-28;@153.2630,48.0590,10z",
     "status": "unverified",
     "type": "thermal"
   },
@@ -45,17 +45,17 @@
     "date": "2026-05-30",
     "geometry": {
       "coordinates": [
-        147.944,
-        45.075
+        147.626,
+        44.924
       ],
       "type": "Point"
     },
     "id": "firms-etorofu-burevestnik-2026-05-30",
-    "notes": "【サンプルデータ／SAMPLE】1 件の熱異常検知（ブレヴェスニク（ヤースヌィ）航空基地）。最大FRP 6.3 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
+    "notes": "【サンプルデータ／SAMPLE】1 件の熱異常検知（ブレヴェスニク航空基地）。最大FRP 6.3 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
-      "query": "area=147.86,45.01,148.02,45.13 date=2026-05-30",
-      "retrieved_at": "2026-06-08T16:09:23Z",
+      "query": "area=147.577,44.89,147.667,44.95 date=2026-05-30",
+      "retrieved_at": "2026-06-08T16:55:03Z",
       "source": "firms"
     },
     "raw": {
@@ -66,8 +66,8 @@
           "confidence": "l",
           "daynight": "D",
           "frp": 6.3,
-          "lat": 45.075,
-          "lon": 147.944,
+          "lat": 44.924,
+          "lon": 147.626,
           "product": "VIIRS_SNPP_NRT"
         }
       ],
@@ -77,7 +77,7 @@
       ]
     },
     "signal_strength": 0.196,
-    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-05-30;@147.9440,45.0750,10z",
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-05-30;@147.6260,44.9240,10z",
     "status": "unverified",
     "type": "thermal"
   },
@@ -86,17 +86,17 @@
     "date": "2026-06-01",
     "geometry": {
       "coordinates": [
-        146.82,
-        43.87
+        146.8278,
+        43.8706
       ],
       "type": "Point"
     },
     "id": "firms-shikotan-malokurilskoye-2026-06-01",
-    "notes": "【サンプルデータ／SAMPLE】1 件の熱異常検知（マロクリリスコエ沿岸防衛施設）。最大FRP 4.5 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
+    "notes": "【サンプルデータ／SAMPLE】1 件の熱異常検知（マロクリリスコエ沿岸防衛区域）。最大FRP 4.5 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
-      "query": "area=146.75,43.82,146.89,43.92 date=2026-06-01",
-      "retrieved_at": "2026-06-08T16:09:23Z",
+      "query": "area=146.7878,43.8426,146.8678,43.8986 date=2026-06-01",
+      "retrieved_at": "2026-06-08T16:55:03Z",
       "source": "firms"
     },
     "raw": {
@@ -107,8 +107,8 @@
           "confidence": "l",
           "daynight": "D",
           "frp": 4.5,
-          "lat": 43.87,
-          "lon": 146.82,
+          "lat": 43.8706,
+          "lon": 146.8278,
           "product": "VIIRS_SNPP_NRT"
         }
       ],
@@ -118,7 +118,7 @@
       ]
     },
     "signal_strength": 0.174,
-    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-06-01;@146.8200,43.8700,10z",
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-06-01;@146.8278,43.8706,10z",
     "status": "unverified",
     "type": "thermal"
   },
@@ -127,8 +127,8 @@
     "date": "2026-06-02",
     "geometry": {
       "coordinates": [
-        153.23199999999997,
-        48.082499999999996
+        153.257,
+        48.053
       ],
       "type": "Point"
     },
@@ -136,8 +136,8 @@
     "notes": "【サンプルデータ／SAMPLE】2 件の熱異常検知（松輪島 再建飛行場・基地）。最大FRP 31.4 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
-      "query": "area=153.14,48.01,153.32,48.15 date=2026-06-02",
-      "retrieved_at": "2026-06-08T16:09:23Z",
+      "query": "area=153.195,48.011,153.315,48.091 date=2026-06-02",
+      "retrieved_at": "2026-06-08T16:55:03Z",
       "source": "firms"
     },
     "raw": {
@@ -148,8 +148,8 @@
           "confidence": "h",
           "daynight": "N",
           "frp": 31.4,
-          "lat": 48.08,
-          "lon": 153.23,
+          "lat": 48.051,
+          "lon": 153.255,
           "product": "VIIRS_SNPP_NRT"
         },
         {
@@ -157,8 +157,8 @@
           "confidence": "n",
           "daynight": "N",
           "frp": 8.2,
-          "lat": 48.085,
-          "lon": 153.23399999999998,
+          "lat": 48.055,
+          "lon": 153.259,
           "product": "VIIRS_SNPP_NRT"
         }
       ],
@@ -168,7 +168,48 @@
       ]
     },
     "signal_strength": 0.737,
-    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-06-02;@153.2320,48.0825,10z",
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-06-02;@153.2570,48.0530,10z",
+    "status": "unverified",
+    "type": "thermal"
+  },
+  {
+    "aoi_id": "etorofu-yasny",
+    "date": "2026-06-03",
+    "geometry": {
+      "coordinates": [
+        147.9555,
+        45.2564
+      ],
+      "type": "Point"
+    },
+    "id": "firms-etorofu-yasny-2026-06-03",
+    "notes": "【サンプルデータ／SAMPLE】1 件の熱異常検知（ヤースヌィ航空基地（イトゥルップ空港））。最大FRP 11.2 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
+    "provenance": {
+      "dataset": "VIIRS_SNPP_NRT",
+      "query": "area=147.9205,45.2314,147.9905,45.2814 date=2026-06-03",
+      "retrieved_at": "2026-06-08T16:55:03Z",
+      "source": "firms"
+    },
+    "raw": {
+      "detection_count": 1,
+      "detections": [
+        {
+          "acq_time": "0050",
+          "confidence": "n",
+          "daynight": "N",
+          "frp": 11.2,
+          "lat": 45.2564,
+          "lon": 147.9555,
+          "product": "VIIRS_SNPP_NRT"
+        }
+      ],
+      "max_frp_mw": 11.2,
+      "products": [
+        "VIIRS_SNPP_NRT"
+      ]
+    },
+    "signal_strength": 0.374,
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-06-03;@147.9555,45.2564,10z",
     "status": "unverified",
     "type": "thermal"
   },
@@ -177,8 +218,8 @@
     "date": "2026-06-04",
     "geometry": {
       "coordinates": [
-        145.75,
-        44.0
+        145.6844,
+        43.9611
       ],
       "type": "Point"
     },
@@ -186,8 +227,8 @@
     "notes": "【サンプルデータ／SAMPLE】1 件の熱異常検知（ユジノクリリスク守備隊・メンデレーエヴォ空港）。最大FRP 9.1 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
-      "query": "area=145.66,43.93,145.84,44.07 date=2026-06-04",
-      "retrieved_at": "2026-06-08T16:09:23Z",
+      "query": "area=145.6344,43.9261,145.7344,43.9961 date=2026-06-04",
+      "retrieved_at": "2026-06-08T16:55:03Z",
       "source": "firms"
     },
     "raw": {
@@ -198,8 +239,8 @@
           "confidence": "n",
           "daynight": "N",
           "frp": 9.1,
-          "lat": 44.0,
-          "lon": 145.75,
+          "lat": 43.9611,
+          "lon": 145.6844,
           "product": "VIIRS_SNPP_NRT"
         }
       ],
@@ -209,7 +250,7 @@
       ]
     },
     "signal_strength": 0.349,
-    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-06-04;@145.7500,44.0000,10z",
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-06-04;@145.6844,43.9611,10z",
     "status": "unverified",
     "type": "thermal"
   },
@@ -218,17 +259,17 @@
     "date": "2026-06-05",
     "geometry": {
       "coordinates": [
-        147.94,
-        45.07
+        147.622,
+        44.92
       ],
       "type": "Point"
     },
     "id": "firms-etorofu-burevestnik-2026-06-05",
-    "notes": "【サンプルデータ／SAMPLE】1 件の熱異常検知（ブレヴェスニク（ヤースヌィ）航空基地）。最大FRP 18.7 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
+    "notes": "【サンプルデータ／SAMPLE】1 件の熱異常検知（ブレヴェスニク航空基地）。最大FRP 18.7 MW。センサー: VIIRS_SNPP_NRT。自動検知の候補であり、未確認です。FIRMSの元データで確認してください。",
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
-      "query": "area=147.86,45.01,148.02,45.13 date=2026-06-05",
-      "retrieved_at": "2026-06-08T16:09:23Z",
+      "query": "area=147.577,44.89,147.667,44.95 date=2026-06-05",
+      "retrieved_at": "2026-06-08T16:55:03Z",
       "source": "firms"
     },
     "raw": {
@@ -239,8 +280,8 @@
           "confidence": "h",
           "daynight": "N",
           "frp": 18.7,
-          "lat": 45.07,
-          "lon": 147.94,
+          "lat": 44.92,
+          "lon": 147.622,
           "product": "VIIRS_SNPP_NRT"
         }
       ],
@@ -250,7 +291,7 @@
       ]
     },
     "signal_strength": 0.584,
-    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-06-05;@147.9400,45.0700,10z",
+    "source_url": "https://firms.modaps.eosdis.nasa.gov/map/#d:2026-06-05;@147.6220,44.9200,10z",
     "status": "unverified",
     "type": "thermal"
   }

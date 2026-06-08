@@ -2,31 +2,56 @@
   "type": "FeatureCollection",
   "metadata": {
     "title": "Kuril Islands Militarization Monitor — Areas of Interest",
-    "description": "Seed list of monitored military facilities on the southern Kuril chain (including the islands Japan claims as the Northern Territories). Coordinates are approximate and should be verified and refined. This is the single editable config for areas of interest; add new sites here without touching code.",
+    "description": "Monitored military facilities on the southern Kuril chain (including the islands Japan claims as the Northern Territories). This is the single editable config for areas of interest; add new sites here without touching code.",
     "crs": "EPSG:4326",
-    "schema_version": 1
+    "schema_version": 1,
+    "coordinates_verified": "2026-06-08",
+    "coordinate_sources": "Centers verified against open sources (Wikipedia, OpenStreetMap, public airport databases). Airfield centers are precise to the runway; coastal-defense systems are mobile, so those AOIs are broad-area boxes anchored on the named bay/settlement rather than a specific launcher pad. Verify and refine polygons further against current imagery before relying on them for detection."
   },
   "features": [
     {
       "type": "Feature",
       "properties": {
         "id": "etorofu-burevestnik",
-        "name": "Burevestnik / Yasny Airbase",
-        "name_ja": "ブレヴェスニク（ヤースヌィ）航空基地",
+        "name": "Burevestnik Airbase",
+        "name_ja": "ブレヴェスニク航空基地",
         "island": "Etorofu (Iturup)",
         "island_ja": "択捉島",
         "facility_type": "airbase",
-        "center": [147.94, 45.07],
-        "notes": "Military airfield on Iturup. Approximate location; verify and refine polygon."
+        "center": [147.622, 44.92],
+        "notes": "Soviet/Russian military airfield (ICAO UHSB, runway 14/32) on the Vetrovoy isthmus, southeast Iturup, beside Kasatka Bay. Center verified to the runway."
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [[
-          [147.86, 45.01],
-          [148.02, 45.01],
-          [148.02, 45.13],
-          [147.86, 45.13],
-          [147.86, 45.01]
+          [147.577, 44.89],
+          [147.667, 44.89],
+          [147.667, 44.95],
+          [147.577, 44.95],
+          [147.577, 44.89]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "etorofu-yasny",
+        "name": "Yasny Airbase (Iturup Airport)",
+        "name_ja": "ヤースヌィ航空基地（イトゥルップ空港）",
+        "island": "Etorofu (Iturup)",
+        "island_ja": "択捉島",
+        "facility_type": "airbase",
+        "center": [147.9555, 45.2564],
+        "notes": "Joint civil-military airport (ICAO UHSI) ~7 km northeast of Kurilsk; opened 2014, basing Su-35S fighters since 2018. Center verified to the runway."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [147.9205, 45.2314],
+          [147.9905, 45.2314],
+          [147.9905, 45.2814],
+          [147.9205, 45.2814],
+          [147.9205, 45.2314]
         ]]
       }
     },
@@ -34,22 +59,22 @@
       "type": "Feature",
       "properties": {
         "id": "etorofu-kasatka",
-        "name": "Kasatka Bay (Hitokappu Bay) Coastal Defense Site",
-        "name_ja": "カサトカ湾（単冠湾）沿岸防衛施設",
+        "name": "Kasatka Bay (Hitokappu Bay) Coastal Defense Area",
+        "name_ja": "カサトカ湾（単冠湾）沿岸防衛区域",
         "island": "Etorofu (Iturup)",
         "island_ja": "択捉島",
         "facility_type": "coastal_defense",
-        "center": [147.90, 45.30],
-        "notes": "Coastal defense site on Kasatka / Hitokappu Bay. Approximate location; verify and refine polygon."
+        "center": [147.672, 44.965],
+        "notes": "Kasatka / Hitokappu Bay, anchorage of the 1941 Pearl Harbor strike force; associated with Bal/Bastion coastal-missile activity on Iturup. Broad-area box on the bay (mobile systems have no fixed footprint)."
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [[
-          [147.83, 45.25],
-          [147.97, 45.25],
-          [147.97, 45.35],
-          [147.83, 45.35],
-          [147.83, 45.25]
+          [147.632, 44.937],
+          [147.712, 44.937],
+          [147.712, 44.993],
+          [147.632, 44.993],
+          [147.632, 44.937]
         ]]
       }
     },
@@ -62,17 +87,17 @@
         "island": "Kunashiri (Kunashir)",
         "island_ja": "国後島",
         "facility_type": "garrison",
-        "center": [145.75, 44.00],
-        "notes": "Garrison and adjacent airport area on Kunashir. Approximate location; verify and refine polygon."
+        "center": [145.6844, 43.9611],
+        "notes": "Box centered on Mendeleyevo Airport (ICAO UHSM); the Yuzhno-Kurilsk garrison and Bal coastal-missile activity are in the wider area to the northeast. Airport center verified."
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [[
-          [145.66, 43.93],
-          [145.84, 43.93],
-          [145.84, 44.07],
-          [145.66, 44.07],
-          [145.66, 43.93]
+          [145.6344, 43.9261],
+          [145.7344, 43.9261],
+          [145.7344, 43.9961],
+          [145.6344, 43.9961],
+          [145.6344, 43.9261]
         ]]
       }
     },
@@ -80,22 +105,22 @@
       "type": "Feature",
       "properties": {
         "id": "shikotan-malokurilskoye",
-        "name": "Malokurilskoye Coastal Defense Site",
-        "name_ja": "マロクリリスコエ沿岸防衛施設",
+        "name": "Malokurilskoye Coastal Defense Area",
+        "name_ja": "マロクリリスコエ沿岸防衛区域",
         "island": "Shikotan",
         "island_ja": "色丹島",
         "facility_type": "coastal_defense",
-        "center": [146.82, 43.87],
-        "notes": "Coastal defense site near Malokurilskoye on Shikotan. Approximate location; verify and refine polygon."
+        "center": [146.8278, 43.8706],
+        "notes": "Box on Malokurilskoye settlement and Malokurilsk Bay, Shikotan; site of Russian military buildup. Settlement center verified."
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [[
-          [146.75, 43.82],
-          [146.89, 43.82],
-          [146.89, 43.92],
-          [146.75, 43.92],
-          [146.75, 43.82]
+          [146.7878, 43.8426],
+          [146.8678, 43.8426],
+          [146.8678, 43.8986],
+          [146.7878, 43.8986],
+          [146.7878, 43.8426]
         ]]
       }
     },
@@ -108,17 +133,17 @@
         "island": "Matua (central chain)",
         "island_ja": "松輪島（中部千島）",
         "facility_type": "airbase",
-        "center": [153.23, 48.08],
-        "notes": "Reconstructed airfield and base on Matua in the central Kuril chain. Approximate location; verify and refine polygon."
+        "center": [153.255, 48.051],
+        "notes": "Reconstructed airfield (new ~1.4 km runway built 2016-2019) and forward base on Matua; reported Bastion battery. Airfield center verified."
       },
       "geometry": {
         "type": "Polygon",
         "coordinates": [[
-          [153.14, 48.01],
-          [153.32, 48.01],
-          [153.32, 48.15],
-          [153.14, 48.15],
-          [153.14, 48.01]
+          [153.195, 48.011],
+          [153.315, 48.011],
+          [153.315, 48.091],
+          [153.195, 48.091],
+          [153.195, 48.011]
         ]]
       }
     }
