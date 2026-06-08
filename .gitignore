@@ -1,0 +1,38 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+.python-version
+
+# --- Node / Next.js ---
+node_modules/
+web/.next/
+web/out/
+web/build/
+web/tsconfig.tsbuildinfo
+*.tsbuildinfo
+.DS_Store
+npm-debug.log*
+yarn-error.log*
+
+# --- Secrets / env ---
+.env
+.env.local
+.env.*.local
+*.local.env
+
+# --- Data store (generated) ---
+# The seed AOI config (data/aois.geojson) and the sample event file
+# (data/events.sample.json) ARE committed. The live event store written by
+# the pipeline is generated and should not be committed.
+data/events.json
+data/firms.sqlite
+data/*.sqlite-journal
+
+# --- Editor / OS ---
+.idea/
+.vscode/
+*.swp

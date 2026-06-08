@@ -1,0 +1,9 @@
+# Core pipeline dependencies (Phase 1).
+# Pinned to permissive lower bounds; the pipeline targets Python 3.11+.
+requests>=2.31,<3
+python-dateutil>=2.8,<3
+
+# Phase 2+ (SAR / optical via Google Earth Engine) — uncomment when implementing.
+# earthengine-api>=0.1.380
+# Phase 4 (AIS) — uncomment when implementing.
+# websockets>=12.0

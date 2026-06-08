@@ -1,0 +1,126 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "title": "Kuril Islands Militarization Monitor — Areas of Interest",
+    "description": "Seed list of monitored military facilities on the southern Kuril chain (including the islands Japan claims as the Northern Territories). Coordinates are approximate and should be verified and refined. This is the single editable config for areas of interest; add new sites here without touching code.",
+    "crs": "EPSG:4326",
+    "schema_version": 1
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "etorofu-burevestnik",
+        "name": "Burevestnik / Yasny Airbase",
+        "name_ja": "ブレヴェスニク（ヤースヌィ）航空基地",
+        "island": "Etorofu (Iturup)",
+        "island_ja": "択捉島",
+        "facility_type": "airbase",
+        "center": [147.94, 45.07],
+        "notes": "Military airfield on Iturup. Approximate location; verify and refine polygon."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [147.86, 45.01],
+          [148.02, 45.01],
+          [148.02, 45.13],
+          [147.86, 45.13],
+          [147.86, 45.01]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "etorofu-kasatka",
+        "name": "Kasatka Bay (Hitokappu Bay) Coastal Defense Site",
+        "name_ja": "カサトカ湾（単冠湾）沿岸防衛施設",
+        "island": "Etorofu (Iturup)",
+        "island_ja": "択捉島",
+        "facility_type": "coastal_defense",
+        "center": [147.90, 45.30],
+        "notes": "Coastal defense site on Kasatka / Hitokappu Bay. Approximate location; verify and refine polygon."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [147.83, 45.25],
+          [147.97, 45.25],
+          [147.97, 45.35],
+          [147.83, 45.35],
+          [147.83, 45.25]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kunashiri-yuzhno",
+        "name": "Yuzhno-Kurilsk Garrison & Mendeleyevo Airport",
+        "name_ja": "ユジノクリリスク守備隊・メンデレーエヴォ空港",
+        "island": "Kunashiri (Kunashir)",
+        "island_ja": "国後島",
+        "facility_type": "garrison",
+        "center": [145.75, 44.00],
+        "notes": "Garrison and adjacent airport area on Kunashir. Approximate location; verify and refine polygon."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [145.66, 43.93],
+          [145.84, 43.93],
+          [145.84, 44.07],
+          [145.66, 44.07],
+          [145.66, 43.93]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "shikotan-malokurilskoye",
+        "name": "Malokurilskoye Coastal Defense Site",
+        "name_ja": "マロクリリスコエ沿岸防衛施設",
+        "island": "Shikotan",
+        "island_ja": "色丹島",
+        "facility_type": "coastal_defense",
+        "center": [146.82, 43.87],
+        "notes": "Coastal defense site near Malokurilskoye on Shikotan. Approximate location; verify and refine polygon."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [146.75, 43.82],
+          [146.89, 43.82],
+          [146.89, 43.92],
+          [146.75, 43.92],
+          [146.75, 43.82]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "matua-airfield",
+        "name": "Matua Reconstructed Airfield & Base",
+        "name_ja": "松輪島 再建飛行場・基地",
+        "island": "Matua (central chain)",
+        "island_ja": "松輪島（中部千島）",
+        "facility_type": "airbase",
+        "center": [153.23, 48.08],
+        "notes": "Reconstructed airfield and base on Matua in the central Kuril chain. Approximate location; verify and refine polygon."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [153.14, 48.01],
+          [153.32, 48.01],
+          [153.32, 48.15],
+          [153.14, 48.15],
+          [153.14, 48.01]
+        ]]
+      }
+    }
+  ]
+}
