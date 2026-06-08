@@ -43,7 +43,7 @@ Built in phases. **Phase 1 is complete** (scaffold + FIRMS end to end).
 | Phase | Scope | Status |
 | ----- | ----- | ------ |
 | 1 | Scaffold + NASA FIRMS thermal anomalies end to end (pipeline → store → Japanese map UI) | ✅ done |
-| 2 | Sentinel-1 SAR backscatter change detection (construction / clearance) | ⛔ stub (`pipeline/sources/sar.py`) |
+| 2 | Sentinel-1 SAR backscatter change detection (construction / clearance) via Earth Engine | ✅ done (runnable locally with EE credentials; map renders change polygons) |
 | 3 | Sentinel-2 optical confirmation + baseline-vs-recent compare + verification UX | ⛔ stub (`pipeline/sources/optical.py`) |
 | 4 | AIS naval-activity layer + manual commercial-image link field | ⛔ stub (`pipeline/sources/ais.py`) |
 
@@ -64,8 +64,8 @@ pipeline/               # Python ingestion + detection
   run.py                # orchestrator: iterate AOIs, run sources, write the store
   sources/
     base.py             # Source interface: fetch(aoi, since) + detect(aoi, window)
-    firms.py            # NASA FIRMS thermal anomalies (fully implemented)
-    sar.py              # Sentinel-1 SAR     (Phase 2 stub)
+    firms.py            # NASA FIRMS thermal anomalies (implemented)
+    sar.py              # Sentinel-1 SAR backscatter change detection (implemented; EE backend)
     optical.py          # Sentinel-2 optical (Phase 3 stub)
     ais.py              # AIS naval activity (Phase 4 stub)
   tests/                # pytest unit tests (no network)
@@ -101,12 +101,14 @@ The Python `Event` (`pipeline/models.py`) and the TypeScript `MonitorEvent`
 
 All monitored sites live in **`data/aois.geojson`** — a single editable config.
 Add a new facility by appending a GeoJSON `Feature` with the right properties;
-no code changes are needed. Seed sites (coordinates approximate, verify/refine):
+no code changes are needed. Centers were verified against open sources
+(airfield centers are precise to the runway; mobile coastal-defense systems use
+broad-area boxes). Seed sites:
 
-- **Etorofu (Iturup / 択捉島):** Burevestnik/Yasny airbase; Kasatka (Hitokappu) Bay coastal defense
-- **Kunashiri (Kunashir / 国後島):** Yuzhno-Kurilsk garrison & Mendeleyevo airport
-- **Shikotan (色丹島):** Malokurilskoye coastal defense
-- **Matua (松輪島, central chain):** reconstructed airfield & base
+- **Etorofu (Iturup / 択捉島):** Burevestnik airbase (44.920/147.622); Yasny airbase / Iturup Airport (45.256/147.955); Kasatka (Hitokappu) Bay coastal-defense area (44.965/147.672)
+- **Kunashiri (Kunashir / 国後島):** Yuzhno-Kurilsk garrison & Mendeleyevo airport (43.961/145.684)
+- **Shikotan (色丹島):** Malokurilskoye coastal-defense area (43.871/146.828)
+- **Matua (松輪島, central chain):** reconstructed airfield & base (48.051/153.255)
 
 ---
 
@@ -142,6 +144,33 @@ The pipeline is idempotent: re-running replaces matching events rather than
 duplicating them. Without `FIRMS_MAP_KEY` set, the FIRMS source degrades
 gracefully (logs a warning, writes no events) instead of crashing.
 
+### 1b. Sentinel-1 SAR change detection (Phase 2, optional)
+
+The SAR source compares a recent Sentinel-1 backscatter composite against an
+earlier baseline over each AOI and flags significant change as unverified
+`construction` (backscatter increase) / `clearance` (decrease) candidates, each
+linked to the underlying scene in the Copernicus EO Browser. It runs on Google
+Earth Engine, which needs Google credentials (not available in CI), so it is
+**opt-in** via `--source sentinel-1`.
+
+```bash
+pip install -r pipeline/requirements.txt -r pipeline/requirements-sar.txt
+earthengine authenticate          # one-time, opens a browser
+export EE_PROJECT=your-gcp-project-id
+
+# 240-day lookback so the baseline window has Sentinel-1 coverage:
+python3 -m pipeline.run --source sentinel-1 --days 240
+# Run both sources together:
+python3 -m pipeline.run --source firms --source sentinel-1 --days 240
+```
+
+Service-account auth is also supported: set `GOOGLE_APPLICATION_CREDENTIALS`
+(JSON key path) and `EE_SERVICE_ACCOUNT` (its email). All Earth Engine access
+is isolated behind a `SarBackend` interface (`pipeline/sources/sar.py`), so the
+detection logic is unit-tested with a fake backend and the module imports fine
+without `earthengine-api` installed. Detection parameters (polarization, orbit
+pass, change threshold, smoothing, min area) live in `SarParams`.
+
 ### 2. Web app (Next.js)
 
 ```bash
@@ -174,7 +203,7 @@ the OSMF tile usage policy (`web/src/lib/style.ts`).
 | Source | Sensor | Role | Phase |
 | ------ | ------ | ---- | ----- |
 | **NASA FIRMS** (VIIRS + MODIS) | Thermal anomalies / active fire | Near-real-time thermal events inside each AOI | 1 ✅ |
-| **Sentinel-1** (C-band SAR) | Radar (all-weather, day/night) | Primary: backscatter change → construction/clearance candidates | 2 |
+| **Sentinel-1** (C-band SAR) | Radar (all-weather, day/night) | Primary: backscatter change → construction/clearance candidates | 2 ✅ |
 | **Sentinel-2** (optical, 10 m) | Optical | Clear-day visual confirmation of SAR-flagged change | 3 |
 | **AIS** (satellite-relayed) | Vessel positions | Naval activity in adjacent bays | 4 (stretch) |
 

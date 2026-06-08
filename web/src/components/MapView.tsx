@@ -22,8 +22,20 @@ interface Props {
   onSelectAoi: (id: string | null) => void;
 }
 
-// Build a GeoJSON FeatureCollection of event points for the map source.
-function eventsToGeoJson(events: MonitorEvent[]) {
+function eventProps(e: MonitorEvent) {
+  return {
+    id: e.id,
+    aoi_id: e.aoi_id,
+    type: e.type,
+    color: EVENT_COLORS[e.type as EventType] ?? EVENT_COLORS.other,
+    radius: 5 + Math.round(e.signal_strength * 9),
+    date: e.date,
+    notes: e.notes,
+  };
+}
+
+// Point-geometry events (e.g. FIRMS thermal) -> circle markers.
+function eventsToPointGeoJson(events: MonitorEvent[]) {
   return {
     type: "FeatureCollection" as const,
     features: events
@@ -31,15 +43,24 @@ function eventsToGeoJson(events: MonitorEvent[]) {
       .map((e) => ({
         type: "Feature" as const,
         geometry: e.geometry,
-        properties: {
-          id: e.id,
-          aoi_id: e.aoi_id,
-          type: e.type,
-          color: EVENT_COLORS[e.type as EventType] ?? EVENT_COLORS.other,
-          radius: 5 + Math.round(e.signal_strength * 9),
-          date: e.date,
-          notes: e.notes,
-        },
+        properties: eventProps(e),
+      })),
+  };
+}
+
+// Polygon-geometry events (e.g. Sentinel-1 change patches) -> filled regions.
+function eventsToPolygonGeoJson(events: MonitorEvent[]) {
+  return {
+    type: "FeatureCollection" as const,
+    features: events
+      .filter(
+        (e) =>
+          e.geometry?.type === "Polygon" || e.geometry?.type === "MultiPolygon",
+      )
+      .map((e) => ({
+        type: "Feature" as const,
+        geometry: e.geometry,
+        properties: eventProps(e),
       })),
   };
 }
@@ -96,7 +117,11 @@ export default function MapView({
       });
       map.addSource("events", {
         type: "geojson",
-        data: eventsToGeoJson(events) as never,
+        data: eventsToPointGeoJson(events) as never,
+      });
+      map.addSource("event-polys", {
+        type: "geojson",
+        data: eventsToPolygonGeoJson(events) as never,
       });
 
       // AOI polygons.
@@ -119,6 +144,20 @@ export default function MapView({
             1.2,
           ],
         },
+      });
+
+      // Polygon change-events (e.g. Sentinel-1 backscatter change patches).
+      map.addLayer({
+        id: "event-poly-fill",
+        type: "fill",
+        source: "event-polys",
+        paint: { "fill-color": ["get", "color"], "fill-opacity": 0.28 },
+      });
+      map.addLayer({
+        id: "event-poly-line",
+        type: "line",
+        source: "event-polys",
+        paint: { "line-color": ["get", "color"], "line-width": 1.5 },
       });
 
       // Event points (sized by signal strength, colored by type).
@@ -168,22 +207,31 @@ export default function MapView({
         const id = e.features?.[0]?.properties?.id;
         if (typeof id === "string") onSelectRef.current(id);
       };
-      map.on("click", "facility-points", selectFromFeature);
-      map.on("click", "facility-labels", selectFromFeature);
-      map.on("click", "event-points", (e) => {
+      const selectFromAoiId = (e: maplibregl.MapLayerMouseEvent) => {
         const aoiId = e.features?.[0]?.properties?.aoi_id;
         if (typeof aoiId === "string") onSelectRef.current(aoiId);
-      });
+      };
+      map.on("click", "facility-points", selectFromFeature);
+      map.on("click", "facility-labels", selectFromFeature);
+      map.on("click", "event-points", selectFromAoiId);
+      map.on("click", "event-poly-fill", selectFromAoiId);
+
+      const interactiveLayers = [
+        "facility-points",
+        "facility-labels",
+        "event-points",
+        "event-poly-fill",
+      ];
 
       // Clicking empty map clears the selection.
       map.on("click", (e) => {
         const hits = map.queryRenderedFeatures(e.point, {
-          layers: ["facility-points", "facility-labels", "event-points"],
+          layers: interactiveLayers,
         });
         if (hits.length === 0) onSelectRef.current(null);
       });
 
-      for (const layer of ["facility-points", "facility-labels", "event-points"]) {
+      for (const layer of interactiveLayers) {
         map.on("mouseenter", layer, () => (map.getCanvas().style.cursor = "pointer"));
         map.on("mouseleave", layer, () => (map.getCanvas().style.cursor = ""));
       }
@@ -202,8 +250,12 @@ export default function MapView({
     const map = mapRef.current;
     if (!map) return;
     const apply = () => {
-      const src = map.getSource("events") as maplibregl.GeoJSONSource | undefined;
-      src?.setData(eventsToGeoJson(events) as never);
+      const pts = map.getSource("events") as maplibregl.GeoJSONSource | undefined;
+      pts?.setData(eventsToPointGeoJson(events) as never);
+      const polys = map.getSource("event-polys") as
+        | maplibregl.GeoJSONSource
+        | undefined;
+      polys?.setData(eventsToPolygonGeoJson(events) as never);
     };
     if (map.isStyleLoaded()) apply();
     else map.once("idle", apply);
