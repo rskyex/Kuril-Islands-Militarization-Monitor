@@ -23,7 +23,7 @@ Running it for real (locally)
 Earth Engine needs Google credentials, which are not available in CI / the
 build sandbox. To run live:
 
-    pip install -r pipeline/requirements-sar.txt
+    pip install -r pipeline/requirements-ee.txt
     earthengine authenticate                 # one-time, opens a browser
     export EE_PROJECT=your-gcp-project-id     # Cloud project for EE
     python -m pipeline.run --source sentinel-1 --days 240
@@ -345,7 +345,7 @@ class EeBackend:
         except ImportError as exc:  # pragma: no cover - depends on optional dep
             raise RuntimeError(
                 "earthengine-api is not installed. Install it with "
-                "`pip install -r pipeline/requirements-sar.txt` to run the "
+                "`pip install -r pipeline/requirements-ee.txt` to run the "
                 "Sentinel-1 source."
             ) from exc
 

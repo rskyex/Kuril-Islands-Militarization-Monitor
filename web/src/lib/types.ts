@@ -70,8 +70,28 @@ export interface AoiFeatureCollection {
 // sample, so the UI can be transparent about it.
 export type DataOrigin = "live" | "sample" | "empty";
 
+// --- Sentinel-2 optical imagery (Phase 3) ---
+
+export interface AoiImageRef {
+  date: string;
+  cloud_pct: number | null;
+  image_url: string;
+  scene_id?: string | null;
+  source_url: string;
+}
+
+export interface AoiImagery {
+  aoi_id: string;
+  baseline: AoiImageRef | null;
+  recent: AoiImageRef | null;
+  provenance?: Provenance | null;
+}
+
 export interface MonitorData {
   aois: AoiFeatureCollection;
   events: MonitorEvent[];
   origin: DataOrigin;
+  // Per-AOI optical imagery context, keyed by aoi_id (may be empty).
+  imagery: Record<string, AoiImagery>;
+  imageryOrigin: DataOrigin;
 }

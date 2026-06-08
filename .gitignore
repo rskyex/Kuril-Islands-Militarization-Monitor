@@ -31,6 +31,10 @@ yarn-error.log*
 data/events.json
 data/firms.sqlite
 data/*.sqlite-journal
+# Generated Sentinel-2 imagery (index + thumbnails). The committed sample lives
+# in data/imagery.sample.json + web/public/imagery-sample/.
+data/imagery.json
+data/imagery/
 
 # --- Editor / OS ---
 .idea/

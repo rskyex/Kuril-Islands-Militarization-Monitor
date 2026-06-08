@@ -25,9 +25,11 @@ from datetime import date, timedelta
 from typing import Callable
 
 from .config import AOI, load_aois
+from .imagery_store import ImageryStore
 from .models import Event
 from .sources.base import Source
 from .sources.firms import FirmsSource
+from .sources.optical import OpticalSource
 from .sources.sar import SarSource
 from .store import EventStore
 
@@ -84,6 +86,12 @@ def main(argv: list[str] | None = None) -> int:
         action="append",
         help=f"Source(s) to run (repeatable). Available: {', '.join(SOURCE_REGISTRY)}. Default: {', '.join(DEFAULT_SOURCES)}",
     )
+    parser.add_argument(
+        "--imagery",
+        action="store_true",
+        help="Collect Sentinel-2 clear-day imagery (Phase 3). Alone = imagery only; "
+        "combine with --source to also run event sources. Needs Earth Engine.",
+    )
     parser.add_argument("--dry-run", action="store_true", help="Do not write the store")
     parser.add_argument("--verbose", "-v", action="store_true", help="Debug logging")
     args = parser.parse_args(argv)
@@ -102,10 +110,14 @@ def main(argv: list[str] | None = None) -> int:
             return 2
 
     since = date.today() - timedelta(days=max(1, args.days))
-    sources = build_sources(args.source or DEFAULT_SOURCES)
+
+    # `--imagery` alone runs imagery only; otherwise event sources run too.
+    run_events = bool(args.source) or not args.imagery
+    sources = build_sources(args.source or DEFAULT_SOURCES) if run_events else []
     logger.info(
-        "Running %d source(s) over %d AOI(s), since %s",
+        "Running %d event source(s)%s over %d AOI(s), since %s",
         len(sources),
+        " + imagery" if args.imagery else "",
         len(aois),
         since.isoformat(),
     )
@@ -115,6 +127,9 @@ def main(argv: list[str] | None = None) -> int:
         for source in sources:
             all_events.extend(run_source(source, aoi, since))
 
+    if args.imagery:
+        collect_imagery(aois, since, dry_run=args.dry_run)
+
     if args.dry_run:
         logger.info("Dry run: %d event(s) detected, not written.", len(all_events))
         return 0
@@ -122,6 +137,26 @@ def main(argv: list[str] | None = None) -> int:
     written = EventStore().upsert(all_events)
     logger.info("Wrote %d event(s) to the store.", written)
     return 0
+
+
+def collect_imagery(aois: list[AOI], since: date, dry_run: bool) -> None:
+    """Run the Sentinel-2 optical collection over each AOI, logging softly."""
+    optical = OpticalSource()
+    store = ImageryStore()
+    for aoi in aois:
+        try:
+            collected = optical.collect(aoi, since)
+        except Exception as exc:  # noqa: BLE001 — one AOI must not abort the run
+            logger.warning("[sentinel-2] imagery failed for %s: %s", aoi.id, exc)
+            continue
+        if collected is None:
+            logger.info("[sentinel-2] %s: no clear-day scene found", aoi.id)
+            continue
+        if dry_run:
+            logger.info("[sentinel-2] %s: imagery collected (dry run, not saved)", aoi.id)
+            continue
+        store.save(collected)
+        logger.info("[sentinel-2] %s: imagery saved", aoi.id)
 
 
 if __name__ == "__main__":

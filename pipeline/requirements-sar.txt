@@ -1,7 +1,0 @@
-# Phase 2 (Sentinel-1 SAR via Google Earth Engine). Optional / heavy, kept out
-# of the base requirements so the FIRMS pipeline stays light to install.
-#
-#   pip install -r pipeline/requirements.txt -r pipeline/requirements-sar.txt
-#
-# Then authenticate once (`earthengine authenticate`) and set EE_PROJECT.
-earthengine-api>=0.1.380

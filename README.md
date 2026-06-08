@@ -44,7 +44,7 @@ Built in phases. **Phase 1 is complete** (scaffold + FIRMS end to end).
 | ----- | ----- | ------ |
 | 1 | Scaffold + NASA FIRMS thermal anomalies end to end (pipeline → store → Japanese map UI) | ✅ done |
 | 2 | Sentinel-1 SAR backscatter change detection (construction / clearance) via Earth Engine | ✅ done (runnable locally with EE credentials; map renders change polygons) |
-| 3 | Sentinel-2 optical confirmation + baseline-vs-recent compare + verification UX | ⛔ stub (`pipeline/sources/optical.py`) |
+| 3 | Sentinel-2 optical confirmation + baseline-vs-recent swipe compare + verification UX | ✅ done (runnable locally with EE credentials; swipe compare + 確認手順 in the detail panel) |
 | 4 | AIS naval-activity layer + manual commercial-image link field | ⛔ stub (`pipeline/sources/ais.py`) |
 
 ---
@@ -56,6 +56,9 @@ data/
   aois.geojson          # single editable config of monitored sites (add new sites here)
   events.sample.json    # bundled sample events so the UI is demonstrable out of the box
   events.json           # live event store, written by the pipeline (git-ignored)
+  imagery.sample.json   # bundled sample optical index (served from web/public/imagery-sample)
+  imagery.json          # live optical imagery index, written by the pipeline (git-ignored)
+  imagery/              # live Sentinel-2 thumbnails, written by the pipeline (git-ignored)
 
 pipeline/               # Python ingestion + detection
   config.py             # loads AOIs + env-based settings (no secrets committed)
@@ -66,13 +69,15 @@ pipeline/               # Python ingestion + detection
     base.py             # Source interface: fetch(aoi, since) + detect(aoi, window)
     firms.py            # NASA FIRMS thermal anomalies (implemented)
     sar.py              # Sentinel-1 SAR backscatter change detection (implemented; EE backend)
-    optical.py          # Sentinel-2 optical (Phase 3 stub)
+    optical.py          # Sentinel-2 clear-day imagery context (implemented; EE backend)
     ais.py              # AIS naval activity (Phase 4 stub)
+  imagery_store.py      # writes Sentinel-2 thumbnails + data/imagery.json (upsert by AOI)
   tests/                # pytest unit tests (no network)
 
 web/                    # Next.js (App Router) + React + TypeScript + MapLibre GL + D3
   src/app/              # layout (lang="ja") + page (server-loads data)
-  src/components/       # MapView, FacilityList, EventFeed, FacilityPanel, Timeline, DateSlider
+  src/components/       # MapView, FacilityList, EventFeed, FacilityPanel, Timeline, DateSlider, ImageCompare
+  src/app/api/imagery/  # route that serves live Sentinel-2 thumbnails from data/imagery
   src/lib/              # types (event contract), i18n (Japanese strings), data loader, style
 ```
 
@@ -171,6 +176,27 @@ detection logic is unit-tested with a fake backend and the module imports fine
 without `earthengine-api` installed. Detection parameters (polarization, orbit
 pass, change threshold, smoothing, min area) live in `SarParams`.
 
+### 1c. Sentinel-2 clear-day imagery (Phase 3, optional)
+
+The optical source provides *visual confirmation context* — not detections. For
+each AOI it picks the least-cloudy Sentinel-2 scene in a baseline window and a
+recent window, renders true-color thumbnails, and writes them to
+`data/imagery/<aoi>/{baseline,recent}.png` indexed in `data/imagery.json`. The
+detail panel shows them as a **baseline-vs-recent swipe compare** beside the SAR
+signal, with a verification checklist (確認手順). Also Earth Engine, so opt-in:
+
+```bash
+pip install -r pipeline/requirements.txt -r pipeline/requirements-ee.txt
+earthengine authenticate && export EE_PROJECT=your-gcp-project-id
+
+python3 -m pipeline.run --imagery --days 540        # imagery only (wide window for clear days)
+python3 -m pipeline.run --source sentinel-1 --imagery --days 540   # SAR events + imagery
+```
+
+Selection / thumbnail parameters (max cloud %, thumbnail size, true-color
+stretch) live in `OpticalParams`; the Earth Engine calls sit behind the
+`OpticalBackend` interface and are unit-tested with a fake backend.
+
 ### 2. Web app (Next.js)
 
 ```bash
@@ -186,11 +212,14 @@ npm run typecheck  # TypeScript strict mode
 npm run lint
 ```
 
-The web app reads `data/aois.geojson` and `data/events.json` at request time.
-**If `data/events.json` is missing or empty, it falls back to the bundled
-`data/events.sample.json`** (clearly labeled 【サンプルデータ／SAMPLE】) so the
-UI is demonstrable before you run the pipeline. The UI shows a banner stating
-which data origin is in use.
+The web app reads `data/aois.geojson`, `data/events.json`, and
+`data/imagery.json` at request time. **If the live event / imagery files are
+missing or empty, it falls back to the bundled samples**
+(`data/events.sample.json` and `data/imagery.sample.json`, clearly labeled
+SAMPLE) so the UI is demonstrable before you run the pipeline. The UI shows a
+banner stating which data origin is in use. Selecting a facility opens the
+detail panel with the optical baseline-vs-recent swipe compare and the
+verification checklist.
 
 The default basemap uses OpenStreetMap raster tiles (no API key) for
 development. For production deployment, switch to a dedicated tile provider per
@@ -204,7 +233,7 @@ the OSMF tile usage policy (`web/src/lib/style.ts`).
 | ------ | ------ | ---- | ----- |
 | **NASA FIRMS** (VIIRS + MODIS) | Thermal anomalies / active fire | Near-real-time thermal events inside each AOI | 1 ✅ |
 | **Sentinel-1** (C-band SAR) | Radar (all-weather, day/night) | Primary: backscatter change → construction/clearance candidates | 2 ✅ |
-| **Sentinel-2** (optical, 10 m) | Optical | Clear-day visual confirmation of SAR-flagged change | 3 |
+| **Sentinel-2** (optical, 10 m) | Optical | Clear-day visual confirmation of SAR-flagged change (baseline-vs-recent compare) | 3 ✅ |
 | **AIS** (satellite-relayed) | Vessel positions | Naval activity in adjacent bays | 4 (stretch) |
 
 SAR is the primary sensor because it sees through cloud and polar night, which
@@ -223,8 +252,10 @@ Because nothing here is confirmed, the intended human-in-the-loop flow is:
 2. The UI surfaces it with an **未確認** badge and a **元データを確認** (view
    source) link.
 3. A human opens the source (e.g. the FIRMS fire map for that AOI and date),
-   inspects the raw data, and corroborates with SAR/optical context.
-4. (Phase 3+) Optionally attach a commercial high-resolution image link as
+   inspects the raw data, and corroborates a SAR change signal against the
+   Sentinel-2 baseline-vs-recent swipe compare in the detail panel.
+4. (Phase 4) Optionally attach a commercial high-resolution image link as
    confirmation.
 
-This is a prioritization aid for analysts, not an automated verdict.
+The detail panel renders this as an in-app checklist (確認手順). It is a
+prioritization aid for analysts, not an automated verdict.

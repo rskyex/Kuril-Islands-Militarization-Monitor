@@ -282,6 +282,94 @@ input[type="range"] {
   font-size: 12px;
 }
 
+/* Optical baseline/recent swipe compare */
+.compare {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.compare__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: ew-resize;
+  user-select: none;
+  background: #000;
+}
+
+.compare__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.compare__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.compare__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  transform: translateX(-1px);
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+
+.compare__tag {
+  position: absolute;
+  top: 6px;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  pointer-events: none;
+}
+
+.compare__tag--left {
+  left: 6px;
+}
+
+.compare__tag--right {
+  right: 6px;
+}
+
+.compare__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.compare--single img {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: block;
+}
+
+.compare--single figcaption {
+  margin-top: 4px;
+}
+
+.verify-steps {
+  margin: 6px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .app__footer {
   border-top: 1px solid var(--border);
   padding: 8px 18px;

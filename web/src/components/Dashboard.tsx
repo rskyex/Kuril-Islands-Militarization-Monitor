@@ -23,7 +23,7 @@ function uniqueSortedDates(events: MonitorEvent[]): string[] {
 }
 
 export default function Dashboard({ data }: { data: MonitorData }) {
-  const { aois, events, origin } = data;
+  const { aois, events, origin, imagery, imageryOrigin } = data;
 
   const dates = useMemo(() => uniqueSortedDates(events), [events]);
   // Window start = the date from which events are shown. Defaults to earliest.
@@ -97,6 +97,8 @@ export default function Dashboard({ data }: { data: MonitorData }) {
           <FacilityPanel
             aoi={selectedAoi}
             events={focusedEvents}
+            imagery={imagery[selectedAoi.properties.id] ?? null}
+            imageryIsSample={imageryOrigin === "sample"}
             onClear={() => setSelectedAoiId(null)}
           />
         )}

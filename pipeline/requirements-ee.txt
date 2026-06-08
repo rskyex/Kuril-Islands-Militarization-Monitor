@@ -1,0 +1,10 @@
+# Google Earth Engine dependency, shared by the Sentinel-1 SAR source (Phase 2)
+# and the Sentinel-2 optical source (Phase 3). Optional / heavy, kept out of the
+# base requirements so the FIRMS pipeline stays light to install.
+#
+#   pip install -r pipeline/requirements.txt -r pipeline/requirements-ee.txt
+#
+# Then authenticate once (`earthengine authenticate`) and set EE_PROJECT.
+# (Thumbnail download in the optical source uses `requests`, already in the
+# base requirements.)
+earthengine-api>=0.1.380

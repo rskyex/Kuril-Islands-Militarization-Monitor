@@ -65,10 +65,29 @@ export const ja = {
       other: "その他",
     })[t] ?? t,
 
+  // Optical (Sentinel-2) imagery compare
+  opticalHeading: "光学画像（Sentinel-2）",
+  opticalBaseline: "基準",
+  opticalRecent: "直近",
+  opticalCloud: "雲量",
+  opticalCompareHint: "スライダーを左右に動かして基準と直近を比較できます。",
+  opticalNone: "この施設には利用可能な晴天時の光学画像がありません。",
+  opticalSampleNote: "※ サンプル画像（実データではありません）",
+  opticalNoScene: "画像なし",
+
+  // Verification workflow
+  verificationHeading: "確認手順",
+  verificationSteps: [
+    "「未確認」は自動検知の候補です。確定情報ではありません。",
+    "「元データを確認」から元の衛星データ（FIRMS / SAR / 光学）を開きます。",
+    "SARの変化シグナルを光学画像（基準⇄直近）と照合します。",
+    "必要に応じて商用高解像度画像などで人間が確認します。",
+  ] as readonly string[],
+
   // Footer
   dataSources: "データソース",
   dataSourcesList:
-    "NASA FIRMS（VIIRS / MODIS 熱異常）、Sentinel-1 SAR（予定）、Sentinel-2 光学（予定）",
+    "NASA FIRMS（VIIRS / MODIS 熱異常）、Sentinel-1 SAR（後方散乱変化）、Sentinel-2 光学（晴天時の確認画像）",
   about: "本ツールについて",
 } as const;
 

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "_note": "SAMPLE imagery for demo only — not real Sentinel-2 scenes. Served statically from web/public/imagery-sample. A live `python -m pipeline.run --imagery` run writes data/imagery.json referencing /api/imagery/... instead.",
+  "aois": {
+    "matua-airfield": {
+      "aoi_id": "matua-airfield",
+      "baseline": {
+        "date": "2025-08-01",
+        "cloud_pct": 6.0,
+        "image_url": "/imagery-sample/matua-airfield/baseline.svg",
+        "scene_id": "SAMPLE/S2/matua/baseline",
+        "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=48.0510&lng=153.2550&fromTime=2025-08-01T00%3A00%3A00.000Z&toTime=2025-08-01T23%3A59%3A59.999Z&datasetId=S2_L2A_CDAS"
+      },
+      "recent": {
+        "date": "2026-05-20",
+        "cloud_pct": 12.0,
+        "image_url": "/imagery-sample/matua-airfield/recent.svg",
+        "scene_id": "SAMPLE/S2/matua/recent",
+        "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=48.0510&lng=153.2550&fromTime=2026-05-20T00%3A00%3A00.000Z&toTime=2026-05-20T23%3A59%3A59.999Z&datasetId=S2_L2A_CDAS"
+      },
+      "provenance": {
+        "source": "sentinel-2",
+        "dataset": "COPERNICUS/S2_SR_HARMONIZED",
+        "retrieved_at": "2026-06-08T00:00:00Z",
+        "query": "SAMPLE"
+      }
+    },
+    "etorofu-yasny": {
+      "aoi_id": "etorofu-yasny",
+      "baseline": {
+        "date": "2025-09-12",
+        "cloud_pct": 9.0,
+        "image_url": "/imagery-sample/etorofu-yasny/baseline.svg",
+        "scene_id": "SAMPLE/S2/yasny/baseline",
+        "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=45.2564&lng=147.9555&fromTime=2025-09-12T00%3A00%3A00.000Z&toTime=2025-09-12T23%3A59%3A59.999Z&datasetId=S2_L2A_CDAS"
+      },
+      "recent": {
+        "date": "2026-05-18",
+        "cloud_pct": 15.0,
+        "image_url": "/imagery-sample/etorofu-yasny/recent.svg",
+        "scene_id": "SAMPLE/S2/yasny/recent",
+        "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=45.2564&lng=147.9555&fromTime=2026-05-18T00%3A00%3A00.000Z&toTime=2026-05-18T23%3A59%3A59.999Z&datasetId=S2_L2A_CDAS"
+      },
+      "provenance": {
+        "source": "sentinel-2",
+        "dataset": "COPERNICUS/S2_SR_HARMONIZED",
+        "retrieved_at": "2026-06-08T00:00:00Z",
+        "query": "SAMPLE"
+      }
+    }
+  }
+}

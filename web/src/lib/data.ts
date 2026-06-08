@@ -12,6 +12,7 @@ import path from "node:path";
 
 import type {
   AoiFeatureCollection,
+  AoiImagery,
   DataOrigin,
   MonitorData,
   MonitorEvent,
@@ -22,6 +23,8 @@ const DATA_DIR = path.join(process.cwd(), "..", "data");
 const AOIS_PATH = path.join(DATA_DIR, "aois.geojson");
 const EVENTS_PATH = path.join(DATA_DIR, "events.json");
 const EVENTS_SAMPLE_PATH = path.join(DATA_DIR, "events.sample.json");
+const IMAGERY_PATH = path.join(DATA_DIR, "imagery.json");
+const IMAGERY_SAMPLE_PATH = path.join(DATA_DIR, "imagery.sample.json");
 
 async function readJson<T>(filePath: string): Promise<T | null> {
   try {
@@ -65,5 +68,35 @@ export async function loadMonitorData(): Promise<MonitorData> {
   // Stable order: newest first for feeds.
   events.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
-  return { aois, events, origin };
+  const { imagery, imageryOrigin } = await loadImagery();
+
+  return { aois, events, origin, imagery, imageryOrigin };
+}
+
+function normalizeImagery(parsed: unknown): Record<string, AoiImagery> {
+  if (parsed && typeof parsed === "object" && "aois" in parsed) {
+    const aois = (parsed as { aois: unknown }).aois;
+    if (aois && typeof aois === "object") {
+      return aois as Record<string, AoiImagery>;
+    }
+  }
+  return {};
+}
+
+async function loadImagery(): Promise<{
+  imagery: Record<string, AoiImagery>;
+  imageryOrigin: DataOrigin;
+}> {
+  let imagery = normalizeImagery(await readJson(IMAGERY_PATH));
+  let imageryOrigin: DataOrigin = "live";
+  if (Object.keys(imagery).length === 0) {
+    const sample = normalizeImagery(await readJson(IMAGERY_SAMPLE_PATH));
+    if (Object.keys(sample).length > 0) {
+      imagery = sample;
+      imageryOrigin = "sample";
+    } else {
+      imageryOrigin = "empty";
+    }
+  }
+  return { imagery, imageryOrigin };
 }
