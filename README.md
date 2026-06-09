@@ -265,8 +265,13 @@ and data at the repo root. When importing the project into Vercel:
 - **Set the Root Directory to `web`** (Project → Settings → Build & Deployment →
   Root Directory). This is required so Vercel finds the Next.js app; without it
   the build fails with “No Next.js version detected”.
+- That is the **only** required setting. The app is self-contained: its seed
+  data lives inside `web/src/seed/` (mirrored from the repo-root `data/` by
+  `npm run sync-seed`, which also runs automatically before `dev`/`build`), so
+  the build does **not** depend on files outside the root directory — you do
+  **not** need to enable “Include files outside the root directory”.
 - No environment variables are required — the app ships with bundled sample data
-  and renders immediately.
+  and renders immediately. The home page is statically prerendered.
 - The deployed site is **read-only**: it shows the bundled sample (or whatever
   was committed). The live pipeline (FIRMS / SAR / optical / AIS) and the
   “save commercial-image link” action need a writable filesystem, so they run on

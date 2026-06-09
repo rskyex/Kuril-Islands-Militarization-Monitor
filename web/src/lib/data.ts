@@ -20,10 +20,15 @@ import "server-only";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
-import aoisSeed from "../../../data/aois.geojson";
-import confirmationsSeed from "../../../data/confirmations.json";
-import eventsSample from "../../../data/events.sample.json";
-import imagerySample from "../../../data/imagery.sample.json";
+// Bundled seed/sample data. These live INSIDE web/ (src/seed/) — mirrored from
+// the repo-root data/ dir by `npm run sync-seed` — so the build never depends
+// on files outside the Vercel "Root Directory" (web/). They are imported here
+// (compiled into the server bundle) and used as the fallback when no live
+// pipeline output is present.
+import aoisSeed from "@/seed/aois.geojson";
+import confirmationsSeed from "@/seed/confirmations.json";
+import eventsSample from "@/seed/events.sample.json";
+import imagerySample from "@/seed/imagery.sample.json";
 
 import type {
   AoiFeatureCollection,

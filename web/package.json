@@ -4,7 +4,10 @@
   "private": true,
   "description": "Web frontend for the Kuril Islands Militarization Monitor (Japanese UI).",
   "scripts": {
+    "sync-seed": "node scripts/sync-seed.mjs",
+    "predev": "node scripts/sync-seed.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/sync-seed.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
