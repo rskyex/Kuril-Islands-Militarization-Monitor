@@ -27,6 +27,7 @@ from typing import Callable
 from .config import AOI, load_aois
 from .imagery_store import ImageryStore
 from .models import Event
+from .sources.ais import AisSource
 from .sources.base import Source
 from .sources.firms import FirmsSource
 from .sources.optical import OpticalSource
@@ -35,12 +36,13 @@ from .store import EventStore
 
 logger = logging.getLogger("pipeline.run")
 
-# Registry of available sources. ``--source`` selects from these keys; FIRMS is
-# the default. Each value is a factory so a source is only constructed (and its
-# dependencies touched) when actually selected.
+# Registry of available event sources. ``--source`` selects from these keys;
+# FIRMS is the default. Each value is a factory so a source is only constructed
+# (and its dependencies touched) when actually selected.
 SOURCE_REGISTRY: dict[str, Callable[[], Source]] = {
     "firms": FirmsSource,
     "sentinel-1": SarSource,
+    "ais": AisSource,
 }
 DEFAULT_SOURCES = ["firms"]
 

@@ -1,0 +1,6 @@
+# Phase 4 stretch (AIS naval activity via AISStream.io). Optional, kept out of
+# the base requirements. Needs a free key from https://aisstream.io/ exported as
+# AISSTREAM_API_KEY.
+#
+#   pip install -r pipeline/requirements.txt -r pipeline/requirements-ais.txt
+websockets>=12.0

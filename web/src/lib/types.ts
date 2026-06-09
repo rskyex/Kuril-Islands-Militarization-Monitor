@@ -26,6 +26,16 @@ export interface Provenance {
   query?: string | null;
 }
 
+// A human-added link to a commercial high-resolution image used to confirm a
+// candidate. Per the free-data positioning, commercial imagery only ever
+// appears as this optional manual link — it does NOT change the automated
+// `status`, which stays "unverified".
+export interface EventConfirmation {
+  url: string;
+  note?: string;
+  added_at: string;
+}
+
 export interface MonitorEvent {
   id: string;
   aoi_id: string;
@@ -38,6 +48,8 @@ export interface MonitorEvent {
   notes: string;
   provenance?: Provenance | null;
   raw?: Record<string, unknown>;
+  // Merged in by the loader from data/confirmations.json (not pipeline output).
+  confirmation?: EventConfirmation | null;
 }
 
 export interface AoiProperties {

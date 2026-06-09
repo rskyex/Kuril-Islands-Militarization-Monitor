@@ -84,10 +84,23 @@ export const ja = {
     "必要に応じて商用高解像度画像などで人間が確認します。",
   ] as readonly string[],
 
+  // Commercial-image confirmation (Phase 4, manual)
+  confirmationHeading: "商用画像による確認リンク（任意）",
+  confirmationNote:
+    "商用高解像度画像（Maxar / Planet 等）へのリンクは人による確認補助です。自動判定の状態（未確認）は変わりません。",
+  confirmationAdded: "確認リンクあり",
+  confirmationOpen: "確認画像を開く",
+  confirmationUrlPlaceholder: "https://… 商用画像のURL",
+  confirmationNotePlaceholder: "メモ（任意）",
+  confirmationSave: "リンクを保存",
+  confirmationSaving: "保存中…",
+  confirmationError: "保存に失敗しました（読み取り専用環境の可能性があります）。",
+  confirmationAddedAt: "追加日時",
+
   // Footer
   dataSources: "データソース",
   dataSourcesList:
-    "NASA FIRMS（VIIRS / MODIS 熱異常）、Sentinel-1 SAR（後方散乱変化）、Sentinel-2 光学（晴天時の確認画像）",
+    "NASA FIRMS（VIIRS / MODIS 熱異常）、Sentinel-1 SAR（後方散乱変化）、Sentinel-2 光学（晴天時の確認画像）、AIS（艦船活動）",
   about: "本ツールについて",
 } as const;
 

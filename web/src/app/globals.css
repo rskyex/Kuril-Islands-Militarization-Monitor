@@ -370,6 +370,53 @@ input[type="range"] {
   gap: 3px;
 }
 
+/* Commercial-image confirmation control */
+.confirm {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.confirm__existing {
+  font-size: 12px;
+}
+
+.confirm__badge {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid #34d399;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+}
+
+.btn--small {
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+.confirm__form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.confirm__form input {
+  width: 100%;
+  font-size: 12px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+}
+
+.confirm__error {
+  font-size: 11px;
+  color: #fca5a5;
+}
+
 .app__footer {
   border-top: 1px solid var(--border);
   padding: 8px 18px;

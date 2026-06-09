@@ -14,7 +14,7 @@
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
       "query": "area=153.195,48.011,153.315,48.091 date=2026-05-28",
-      "retrieved_at": "2026-06-08T17:01:03Z",
+      "retrieved_at": "2026-06-09T03:46:44Z",
       "source": "firms"
     },
     "raw": {
@@ -55,7 +55,7 @@
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
       "query": "area=147.577,44.89,147.667,44.95 date=2026-05-30",
-      "retrieved_at": "2026-06-08T17:01:03Z",
+      "retrieved_at": "2026-06-09T03:46:44Z",
       "source": "firms"
     },
     "raw": {
@@ -96,7 +96,7 @@
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
       "query": "area=146.7878,43.8426,146.8678,43.8986 date=2026-06-01",
-      "retrieved_at": "2026-06-08T17:01:03Z",
+      "retrieved_at": "2026-06-09T03:46:44Z",
       "source": "firms"
     },
     "raw": {
@@ -137,7 +137,7 @@
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
       "query": "area=153.195,48.011,153.315,48.091 date=2026-06-02",
-      "retrieved_at": "2026-06-08T17:01:03Z",
+      "retrieved_at": "2026-06-09T03:46:44Z",
       "source": "firms"
     },
     "raw": {
@@ -187,7 +187,7 @@
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
       "query": "area=147.9205,45.2314,147.9905,45.2814 date=2026-06-03",
-      "retrieved_at": "2026-06-08T17:01:03Z",
+      "retrieved_at": "2026-06-09T03:46:44Z",
       "source": "firms"
     },
     "raw": {
@@ -228,7 +228,7 @@
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
       "query": "area=145.6344,43.9261,145.7344,43.9961 date=2026-06-04",
-      "retrieved_at": "2026-06-08T17:01:03Z",
+      "retrieved_at": "2026-06-09T03:46:44Z",
       "source": "firms"
     },
     "raw": {
@@ -255,6 +255,46 @@
     "type": "thermal"
   },
   {
+    "aoi_id": "shikotan-malokurilskoye",
+    "date": "2026-06-05",
+    "geometry": {
+      "coordinates": [
+        146.831,
+        43.873
+      ],
+      "type": "Point"
+    },
+    "id": "ais-shikotan-malokurilskoye-273501000-2026-06-05",
+    "notes": "【サンプルデータ／SAMPLE】AIS 艦船・船舶を検出（マロクリリスコエ沿岸防衛区域周辺）。MMSI 273501000、船名「KURIL TRADER」、船種 Fishing、観測 2 回、最新速力 0.2 ノット。民間船を含む未確認の候補です。船舶追跡サービスで確認してください。",
+    "provenance": {
+      "dataset": "AISStream.io PositionReport",
+      "query": "bbox=146.7878,43.8426,146.8678,43.8986 listen_s=60",
+      "retrieved_at": "2026-06-09T03:46:44Z",
+      "source": "ais"
+    },
+    "raw": {
+      "latest_sog_knots": 0.2,
+      "mmsi": 273501000,
+      "name": "KURIL TRADER",
+      "report_count": 2,
+      "ship_type": "Fishing",
+      "track": [
+        [
+          146.83,
+          43.872
+        ],
+        [
+          146.831,
+          43.873
+        ]
+      ]
+    },
+    "signal_strength": 0.453,
+    "source_url": "https://www.marinetraffic.com/en/ais/details/ships/mmsi:273501000",
+    "status": "unverified",
+    "type": "naval"
+  },
+  {
     "aoi_id": "etorofu-burevestnik",
     "date": "2026-06-05",
     "geometry": {
@@ -269,7 +309,7 @@
     "provenance": {
       "dataset": "VIIRS_SNPP_NRT",
       "query": "area=147.577,44.89,147.667,44.95 date=2026-06-05",
-      "retrieved_at": "2026-06-08T17:01:03Z",
+      "retrieved_at": "2026-06-09T03:46:44Z",
       "source": "firms"
     },
     "raw": {
@@ -296,8 +336,88 @@
     "type": "thermal"
   },
   {
+    "aoi_id": "etorofu-kasatka",
+    "date": "2026-06-06",
+    "geometry": {
+      "coordinates": [
+        147.676,
+        44.967
+      ],
+      "type": "Point"
+    },
+    "id": "ais-etorofu-kasatka-273345000-2026-06-06",
+    "notes": "【サンプルデータ／SAMPLE】AIS 艦船・船舶を検出（カサトカ湾（単冠湾）沿岸防衛区域周辺）。MMSI 273345000、船名「PACIFIC STAR」、船種 Cargo、観測 3 回、最新速力 0.0 ノット。民間船を含む未確認の候補です。船舶追跡サービスで確認してください。",
+    "provenance": {
+      "dataset": "AISStream.io PositionReport",
+      "query": "bbox=147.632,44.937,147.712,44.993 listen_s=60",
+      "retrieved_at": "2026-06-09T03:46:44Z",
+      "source": "ais"
+    },
+    "raw": {
+      "latest_sog_knots": 0.0,
+      "mmsi": 273345000,
+      "name": "PACIFIC STAR",
+      "report_count": 3,
+      "ship_type": "Cargo",
+      "track": [
+        [
+          147.674,
+          44.966
+        ],
+        [
+          147.675,
+          44.967
+        ],
+        [
+          147.676,
+          44.967
+        ]
+      ]
+    },
+    "signal_strength": 0.49,
+    "source_url": "https://www.marinetraffic.com/en/ais/details/ships/mmsi:273345000",
+    "status": "unverified",
+    "type": "naval"
+  },
+  {
+    "aoi_id": "etorofu-kasatka",
+    "date": "2026-06-06",
+    "geometry": {
+      "coordinates": [
+        147.668,
+        44.962
+      ],
+      "type": "Point"
+    },
+    "id": "ais-etorofu-kasatka-273912000-2026-06-06",
+    "notes": "【サンプルデータ／SAMPLE】AIS 艦船・船舶を検出（カサトカ湾（単冠湾）沿岸防衛区域周辺）。MMSI 273912000、船名「NORD WIND」、船種 Tanker、観測 1 回、最新速力 9.5 ノット。民間船を含む未確認の候補です。船舶追跡サービスで確認してください。",
+    "provenance": {
+      "dataset": "AISStream.io PositionReport",
+      "query": "bbox=147.632,44.937,147.712,44.993 listen_s=60",
+      "retrieved_at": "2026-06-09T03:46:44Z",
+      "source": "ais"
+    },
+    "raw": {
+      "latest_sog_knots": 9.5,
+      "mmsi": 273912000,
+      "name": "NORD WIND",
+      "report_count": 1,
+      "ship_type": "Tanker",
+      "track": [
+        [
+          147.668,
+          44.962
+        ]
+      ]
+    },
+    "signal_strength": 0.113,
+    "source_url": "https://www.marinetraffic.com/en/ais/details/ships/mmsi:273912000",
+    "status": "unverified",
+    "type": "naval"
+  },
+  {
     "aoi_id": "etorofu-yasny",
-    "date": "2026-06-08",
+    "date": "2026-06-09",
     "geometry": {
       "coordinates": [
         [
@@ -325,12 +445,12 @@
       ],
       "type": "Polygon"
     },
-    "id": "s1-etorofu-yasny-2026-06-08-41eeb9e89c",
-    "notes": "【サンプルデータ／SAMPLE】Sentinel-1 後方散乱の変化を検出（ヤースヌィ航空基地（イトゥルップ空港））。平均変化 +4.2 dB、面積 約1.10 ha、後方散乱増加（建設・新設の可能性）。基準期間 2025-12-01〜2026-05-15 と 直近期間 2026-05-15〜2026-06-08 の比較。偏波 VV／DESCENDING。自動検知の未確認候補です。元のSAR画像で確認してください。",
+    "id": "s1-etorofu-yasny-2026-06-09-4a69ffff2f",
+    "notes": "【サンプルデータ／SAMPLE】Sentinel-1 後方散乱の変化を検出（ヤースヌィ航空基地（イトゥルップ空港））。平均変化 +4.2 dB、面積 約1.10 ha、後方散乱増加（建設・新設の可能性）。基準期間 2025-12-01〜2026-05-16 と 直近期間 2026-05-16〜2026-06-09 の比較。偏波 VV／DESCENDING。自動検知の未確認候補です。元のSAR画像で確認してください。",
     "provenance": {
       "dataset": "COPERNICUS/S1_GRD VV DESCENDING",
-      "query": "baseline=2025-12-01..2026-05-15 recent=2026-05-15..2026-06-08",
-      "retrieved_at": "2026-06-08T17:01:03Z",
+      "query": "baseline=2025-12-01..2026-05-16 recent=2026-05-16..2026-06-09",
+      "retrieved_at": "2026-06-09T03:46:44Z",
       "source": "sentinel-1"
     },
     "raw": {
@@ -345,67 +465,13 @@
       "recent_scene_count": 3
     },
     "signal_strength": 0.532,
-    "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=45.2580&lng=147.9570&fromTime=2026-05-15T00%3A00%3A00.000Z&toTime=2026-06-08T23%3A59%3A59.999Z&datasetId=S1_CDAS_IW_GRD",
+    "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=45.2580&lng=147.9570&fromTime=2026-05-16T00%3A00%3A00.000Z&toTime=2026-06-09T23%3A59%3A59.999Z&datasetId=S1_CDAS_IW_GRD",
     "status": "unverified",
     "type": "construction"
   },
   {
     "aoi_id": "matua-airfield",
-    "date": "2026-06-08",
-    "geometry": {
-      "coordinates": [
-        [
-          [
-            153.256,
-            48.052
-          ],
-          [
-            153.26399999999998,
-            48.052
-          ],
-          [
-            153.26399999999998,
-            48.058
-          ],
-          [
-            153.256,
-            48.058
-          ],
-          [
-            153.256,
-            48.052
-          ]
-        ]
-      ],
-      "type": "Polygon"
-    },
-    "id": "s1-matua-airfield-2026-06-08-01b92828b6",
-    "notes": "【サンプルデータ／SAMPLE】Sentinel-1 後方散乱の変化を検出（松輪島 再建飛行場・基地）。平均変化 -5.1 dB、面積 約0.90 ha、後方散乱減少（地表改変・撤去の可能性）。基準期間 2025-12-01〜2026-05-15 と 直近期間 2026-05-15〜2026-06-08 の比較。偏波 VV／DESCENDING。自動検知の未確認候補です。元のSAR画像で確認してください。",
-    "provenance": {
-      "dataset": "COPERNICUS/S1_GRD VV DESCENDING",
-      "query": "baseline=2025-12-01..2026-05-15 recent=2026-05-15..2026-06-08",
-      "retrieved_at": "2026-06-08T17:01:03Z",
-      "source": "sentinel-1"
-    },
-    "raw": {
-      "area_m2": 9000.0,
-      "baseline_scene_count": 11,
-      "centroid": [
-        153.26,
-        48.055
-      ],
-      "direction": "decrease",
-      "mean_change_db": -5.1,
-      "recent_scene_count": 3
-    },
-    "signal_strength": 0.581,
-    "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=48.0550&lng=153.2600&fromTime=2026-05-15T00%3A00%3A00.000Z&toTime=2026-06-08T23%3A59%3A59.999Z&datasetId=S1_CDAS_IW_GRD",
-    "status": "unverified",
-    "type": "clearance"
-  },
-  {
-    "aoi_id": "matua-airfield",
-    "date": "2026-06-08",
+    "date": "2026-06-09",
     "geometry": {
       "coordinates": [
         [
@@ -433,12 +499,12 @@
       ],
       "type": "Polygon"
     },
-    "id": "s1-matua-airfield-2026-06-08-9a1db3a654",
-    "notes": "【サンプルデータ／SAMPLE】Sentinel-1 後方散乱の変化を検出（松輪島 再建飛行場・基地）。平均変化 +7.4 dB、面積 約1.80 ha、後方散乱増加（建設・新設の可能性）。基準期間 2025-12-01〜2026-05-15 と 直近期間 2026-05-15〜2026-06-08 の比較。偏波 VV／DESCENDING。自動検知の未確認候補です。元のSAR画像で確認してください。",
+    "id": "s1-matua-airfield-2026-06-09-6523114601",
+    "notes": "【サンプルデータ／SAMPLE】Sentinel-1 後方散乱の変化を検出（松輪島 再建飛行場・基地）。平均変化 +7.4 dB、面積 約1.80 ha、後方散乱増加（建設・新設の可能性）。基準期間 2025-12-01〜2026-05-16 と 直近期間 2026-05-16〜2026-06-09 の比較。偏波 VV／DESCENDING。自動検知の未確認候補です。元のSAR画像で確認してください。",
     "provenance": {
       "dataset": "COPERNICUS/S1_GRD VV DESCENDING",
-      "query": "baseline=2025-12-01..2026-05-15 recent=2026-05-15..2026-06-08",
-      "retrieved_at": "2026-06-08T17:01:03Z",
+      "query": "baseline=2025-12-01..2026-05-16 recent=2026-05-16..2026-06-09",
+      "retrieved_at": "2026-06-09T03:46:44Z",
       "source": "sentinel-1"
     },
     "raw": {
@@ -453,8 +519,62 @@
       "recent_scene_count": 3
     },
     "signal_strength": 0.917,
-    "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=48.0500&lng=153.2520&fromTime=2026-05-15T00%3A00%3A00.000Z&toTime=2026-06-08T23%3A59%3A59.999Z&datasetId=S1_CDAS_IW_GRD",
+    "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=48.0500&lng=153.2520&fromTime=2026-05-16T00%3A00%3A00.000Z&toTime=2026-06-09T23%3A59%3A59.999Z&datasetId=S1_CDAS_IW_GRD",
     "status": "unverified",
     "type": "construction"
+  },
+  {
+    "aoi_id": "matua-airfield",
+    "date": "2026-06-09",
+    "geometry": {
+      "coordinates": [
+        [
+          [
+            153.256,
+            48.052
+          ],
+          [
+            153.26399999999998,
+            48.052
+          ],
+          [
+            153.26399999999998,
+            48.058
+          ],
+          [
+            153.256,
+            48.058
+          ],
+          [
+            153.256,
+            48.052
+          ]
+        ]
+      ],
+      "type": "Polygon"
+    },
+    "id": "s1-matua-airfield-2026-06-09-9919272bd8",
+    "notes": "【サンプルデータ／SAMPLE】Sentinel-1 後方散乱の変化を検出（松輪島 再建飛行場・基地）。平均変化 -5.1 dB、面積 約0.90 ha、後方散乱減少（地表改変・撤去の可能性）。基準期間 2025-12-01〜2026-05-16 と 直近期間 2026-05-16〜2026-06-09 の比較。偏波 VV／DESCENDING。自動検知の未確認候補です。元のSAR画像で確認してください。",
+    "provenance": {
+      "dataset": "COPERNICUS/S1_GRD VV DESCENDING",
+      "query": "baseline=2025-12-01..2026-05-16 recent=2026-05-16..2026-06-09",
+      "retrieved_at": "2026-06-09T03:46:44Z",
+      "source": "sentinel-1"
+    },
+    "raw": {
+      "area_m2": 9000.0,
+      "baseline_scene_count": 11,
+      "centroid": [
+        153.26,
+        48.055
+      ],
+      "direction": "decrease",
+      "mean_change_db": -5.1,
+      "recent_scene_count": 3
+    },
+    "signal_strength": 0.581,
+    "source_url": "https://browser.dataspace.copernicus.eu/?zoom=13&lat=48.0550&lng=153.2600&fromTime=2026-05-16T00%3A00%3A00.000Z&toTime=2026-06-09T23%3A59%3A59.999Z&datasetId=S1_CDAS_IW_GRD",
+    "status": "unverified",
+    "type": "clearance"
   }
 ]

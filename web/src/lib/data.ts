@@ -14,6 +14,7 @@ import type {
   AoiFeatureCollection,
   AoiImagery,
   DataOrigin,
+  EventConfirmation,
   MonitorData,
   MonitorEvent,
 } from "./types";
@@ -25,6 +26,7 @@ const EVENTS_PATH = path.join(DATA_DIR, "events.json");
 const EVENTS_SAMPLE_PATH = path.join(DATA_DIR, "events.sample.json");
 const IMAGERY_PATH = path.join(DATA_DIR, "imagery.json");
 const IMAGERY_SAMPLE_PATH = path.join(DATA_DIR, "imagery.sample.json");
+const CONFIRMATIONS_PATH = path.join(DATA_DIR, "confirmations.json");
 
 async function readJson<T>(filePath: string): Promise<T | null> {
   try {
@@ -65,6 +67,13 @@ export async function loadMonitorData(): Promise<MonitorData> {
     }
   }
 
+  // Merge in human-added commercial-image confirmations (Phase 4).
+  const confirmations = await loadConfirmations();
+  for (const ev of events) {
+    const c = confirmations[ev.id];
+    if (c) ev.confirmation = c;
+  }
+
   // Stable order: newest first for feeds.
   events.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
 
@@ -78,6 +87,17 @@ function normalizeImagery(parsed: unknown): Record<string, AoiImagery> {
     const aois = (parsed as { aois: unknown }).aois;
     if (aois && typeof aois === "object") {
       return aois as Record<string, AoiImagery>;
+    }
+  }
+  return {};
+}
+
+async function loadConfirmations(): Promise<Record<string, EventConfirmation>> {
+  const parsed = await readJson(CONFIRMATIONS_PATH);
+  if (parsed && typeof parsed === "object" && "byEventId" in parsed) {
+    const map = (parsed as { byEventId: unknown }).byEventId;
+    if (map && typeof map === "object") {
+      return map as Record<string, EventConfirmation>;
     }
   }
   return {};

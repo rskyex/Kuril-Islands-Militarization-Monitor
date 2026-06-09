@@ -45,7 +45,7 @@ Built in phases. **Phase 1 is complete** (scaffold + FIRMS end to end).
 | 1 | Scaffold + NASA FIRMS thermal anomalies end to end (pipeline → store → Japanese map UI) | ✅ done |
 | 2 | Sentinel-1 SAR backscatter change detection (construction / clearance) via Earth Engine | ✅ done (runnable locally with EE credentials; map renders change polygons) |
 | 3 | Sentinel-2 optical confirmation + baseline-vs-recent swipe compare + verification UX | ✅ done (runnable locally with EE credentials; swipe compare + 確認手順 in the detail panel) |
-| 4 | AIS naval-activity layer + manual commercial-image link field | ⛔ stub (`pipeline/sources/ais.py`) |
+| 4 | AIS naval-activity layer + manual commercial-image link field | ✅ done (runnable locally with an AISStream key; in-app confirmation links) |
 
 ---
 
@@ -70,7 +70,7 @@ pipeline/               # Python ingestion + detection
     firms.py            # NASA FIRMS thermal anomalies (implemented)
     sar.py              # Sentinel-1 SAR backscatter change detection (implemented; EE backend)
     optical.py          # Sentinel-2 clear-day imagery context (implemented; EE backend)
-    ais.py              # AIS naval activity (Phase 4 stub)
+    ais.py              # AIS naval activity (implemented; AISStream.io backend)
   imagery_store.py      # writes Sentinel-2 thumbnails + data/imagery.json (upsert by AOI)
   tests/                # pytest unit tests (no network)
 
@@ -197,6 +197,31 @@ Selection / thumbnail parameters (max cloud %, thumbnail size, true-color
 stretch) live in `OpticalParams`; the Earth Engine calls sit behind the
 `OpticalBackend` interface and are unit-tested with a fake backend.
 
+### 1d. AIS naval activity (Phase 4 stretch, optional)
+
+The AIS source listens to a free real-time feed (AISStream.io) over each AOI's
+bounding box for a short window and emits one unverified `naval` candidate event
+per vessel (MMSI), scored by persistence + low speed (loitering). The
+verification link points to a public vessel-tracking page by MMSI.
+
+```bash
+pip install -r pipeline/requirements.txt -r pipeline/requirements-ais.txt
+export AISSTREAM_API_KEY=...        # free key from https://aisstream.io/
+python3 -m pipeline.run --source ais
+```
+
+The WebSocket I/O sits behind the `AisBackend` interface (lazy `websockets`
+import), so the module imports and is unit-tested without the dependency.
+
+### Commercial-image confirmation links (Phase 4, manual)
+
+Per the free-data positioning, commercial imagery (Maxar / Planet) only ever
+appears as an **optional manual link** a human attaches to confirm a candidate.
+In the detail panel each event has a "+ 商用画像による確認リンク" control;
+saving it `POST`s to `/api/confirmations`, which persists to the committed,
+human-curated `data/confirmations.json` (keyed by event id). This does **not**
+change the event's automated `status`, which stays `unverified`.
+
 ### 2. Web app (Next.js)
 
 ```bash
@@ -234,7 +259,7 @@ the OSMF tile usage policy (`web/src/lib/style.ts`).
 | **NASA FIRMS** (VIIRS + MODIS) | Thermal anomalies / active fire | Near-real-time thermal events inside each AOI | 1 ✅ |
 | **Sentinel-1** (C-band SAR) | Radar (all-weather, day/night) | Primary: backscatter change → construction/clearance candidates | 2 ✅ |
 | **Sentinel-2** (optical, 10 m) | Optical | Clear-day visual confirmation of SAR-flagged change (baseline-vs-recent compare) | 3 ✅ |
-| **AIS** (satellite-relayed) | Vessel positions | Naval activity in adjacent bays | 4 (stretch) |
+| **AIS** (satellite-relayed) | Vessel positions | Naval activity in adjacent bays (one event per vessel/listening window) | 4 ✅ |
 
 SAR is the primary sensor because it sees through cloud and polar night, which
 matters at these high, frequently-overcast latitudes.

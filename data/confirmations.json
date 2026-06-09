@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "_note": "Human-curated commercial-image confirmation links, keyed by event id. This is the ONLY place commercial imagery enters the tool, as an optional manual link for human verification. It does not change an event's automated status (which stays 'unverified'). Edited via the in-app form (POST /api/confirmations) or by hand. The entry below is a labeled SAMPLE.",
+  "byEventId": {
+    "firms-matua-airfield-2026-06-02": {
+      "url": "https://example.com/commercial-imagery/SAMPLE-matua-2026-06-02",
+      "note": "【サンプル】商用高解像度画像リンクの例",
+      "added_at": "2026-06-08T00:00:00Z"
+    }
+  }
+}

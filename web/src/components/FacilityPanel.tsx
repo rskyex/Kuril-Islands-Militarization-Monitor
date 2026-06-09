@@ -2,6 +2,7 @@
 
 import { ja } from "@/lib/i18n";
 import type { AoiFeature, AoiImagery, MonitorEvent } from "@/lib/types";
+import ConfirmationControl from "./ConfirmationControl";
 import ImageCompare from "./ImageCompare";
 
 interface Props {
@@ -82,10 +83,17 @@ export default function FacilityPanel({
               <a href={e.source_url} target="_blank" rel="noopener noreferrer">
                 {ja.viewSource} ↗
               </a>
+              <ConfirmationControl
+                eventId={e.id}
+                confirmation={e.confirmation}
+              />
             </li>
           ))}
         </ul>
       )}
+      <p className="muted" style={{ marginTop: 6 }}>
+        {ja.confirmationNote}
+      </p>
 
       <div className="card__heading" style={{ marginTop: 12 }}>
         {ja.verificationHeading}
