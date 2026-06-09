@@ -237,18 +237,44 @@ npm run typecheck  # TypeScript strict mode
 npm run lint
 ```
 
-The web app reads `data/aois.geojson`, `data/events.json`, and
-`data/imagery.json` at request time. **If the live event / imagery files are
-missing or empty, it falls back to the bundled samples**
-(`data/events.sample.json` and `data/imagery.sample.json`, clearly labeled
-SAMPLE) so the UI is demonstrable before you run the pipeline. The UI shows a
-banner stating which data origin is in use. Selecting a facility opens the
-detail panel with the optical baseline-vs-recent swipe compare and the
-verification checklist.
+Data loading has two layers (`web/src/lib/data.ts`):
+
+1. **Live pipeline output** — read from the repo-root `data/` dir at request
+   time (`events.json`, `imagery.json`, and an edited `aois.geojson` /
+   `confirmations.json`), so a fresh pipeline run shows up without a rebuild.
+   Override the location with `KURIL_DATA_DIR`.
+2. **Bundled seed/sample data** — `data/{aois.geojson, events.sample.json,
+   imagery.sample.json, confirmations.json}` are **imported** (compiled into the
+   server bundle) and used as the fallback when the live files are absent. This
+   is what makes the app render out of the box, and is what a serverless host
+   (Vercel) serves, since the repo-root `data/` dir is not part of that
+   deployment. The UI shows a banner stating which data origin is in use.
+
+Selecting a facility opens the detail panel with the optical baseline-vs-recent
+swipe compare and the verification checklist.
 
 The default basemap uses OpenStreetMap raster tiles (no API key) for
 development. For production deployment, switch to a dedicated tile provider per
 the OSMF tile usage policy (`web/src/lib/style.ts`).
+
+### Deploying to Vercel
+
+This is a **monorepo**: the Next.js app is in `web/`, with the Python pipeline
+and data at the repo root. When importing the project into Vercel:
+
+- **Set the Root Directory to `web`** (Project → Settings → Build & Deployment →
+  Root Directory). This is required so Vercel finds the Next.js app; without it
+  the build fails with “No Next.js version detected”.
+- No environment variables are required — the app ships with bundled sample data
+  and renders immediately.
+- The deployed site is **read-only**: it shows the bundled sample (or whatever
+  was committed). The live pipeline (FIRMS / SAR / optical / AIS) and the
+  “save commercial-image link” action need a writable filesystem, so they run on
+  a self-hosted Node server (`next start`) or a host with persistent storage —
+  on a read-only serverless function the save action fails gracefully with a
+  notice. To publish real monitoring data to a Vercel deploy, run the pipeline
+  elsewhere and commit/publish the resulting `data/*.json`, or point
+  `KURIL_DATA_DIR` at a mounted volume.
 
 ---
 

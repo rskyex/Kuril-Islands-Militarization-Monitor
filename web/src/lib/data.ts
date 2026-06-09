@@ -1,14 +1,29 @@
 // Server-side data loading.
 //
-// The AOI config and event store live in ../data at the repo root (outside
-// the web app). This module reads them at request time. If the live event
-// store (data/events.json) is missing or empty, it falls back to the bundled
-// sample (data/events.sample.json) so the UI is demonstrable out of the box,
-// and reports which origin was used so the UI can be transparent.
+// Two data sources, in priority order:
+//
+//  1. LIVE files written by the pipeline to the repo-root data/ dir (events.json,
+//     imagery.json, and optionally an edited aois.geojson / confirmations.json).
+//     These are read from the filesystem and are picked up without a rebuild.
+//     Available when running a self-hosted Node server (`next start`) from web/,
+//     or via the KURIL_DATA_DIR override.
+//
+//  2. BUNDLED seed/sample data, imported below so it is compiled into the
+//     server bundle. This is the fallback and is ALWAYS available — including
+//     on serverless hosts like Vercel, where the repo-root data/ dir is NOT
+//     part of the deployment and the filesystem reads in (1) simply return null.
+//
+// This makes the app deploy cleanly to Vercel (it renders the bundled sample
+// data) while still showing live pipeline output when self-hosted.
 
 import "server-only";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+
+import aoisSeed from "../../../data/aois.geojson";
+import confirmationsSeed from "../../../data/confirmations.json";
+import eventsSample from "../../../data/events.sample.json";
+import imagerySample from "../../../data/imagery.sample.json";
 
 import type {
   AoiFeatureCollection,
@@ -19,19 +34,16 @@ import type {
   MonitorEvent,
 } from "./types";
 
-// Resolve the repo-root data directory relative to the Next.js cwd (web/).
-const DATA_DIR = path.join(process.cwd(), "..", "data");
-const AOIS_PATH = path.join(DATA_DIR, "aois.geojson");
-const EVENTS_PATH = path.join(DATA_DIR, "events.json");
-const EVENTS_SAMPLE_PATH = path.join(DATA_DIR, "events.sample.json");
-const IMAGERY_PATH = path.join(DATA_DIR, "imagery.json");
-const IMAGERY_SAMPLE_PATH = path.join(DATA_DIR, "imagery.sample.json");
-const CONFIRMATIONS_PATH = path.join(DATA_DIR, "confirmations.json");
+// Live pipeline-output directory. Defaults to the repo-root data/ dir (works
+// for local dev / self-hosted `next start`); override with KURIL_DATA_DIR. On
+// Vercel this path is outside the function bundle, so reads return null and the
+// bundled seed data is used instead.
+const DATA_DIR = process.env.KURIL_DATA_DIR ?? path.join(process.cwd(), "..", "data");
 
-async function readJson<T>(filePath: string): Promise<T | null> {
+async function readLiveJson(name: string): Promise<unknown | null> {
   try {
-    const raw = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(raw) as T;
+    const raw = await fs.readFile(path.join(DATA_DIR, name), "utf-8");
+    return JSON.parse(raw);
   } catch {
     return null;
   }
@@ -46,42 +58,6 @@ function normalizeEvents(parsed: unknown): MonitorEvent[] {
   return [];
 }
 
-export async function loadMonitorData(): Promise<MonitorData> {
-  const aois = await readJson<AoiFeatureCollection>(AOIS_PATH);
-  if (!aois) {
-    throw new Error(
-      `Could not read AOI config at ${AOIS_PATH}. Ensure data/aois.geojson exists.`,
-    );
-  }
-
-  let events = normalizeEvents(await readJson(EVENTS_PATH));
-  let origin: DataOrigin = "live";
-
-  if (events.length === 0) {
-    const sample = normalizeEvents(await readJson(EVENTS_SAMPLE_PATH));
-    if (sample.length > 0) {
-      events = sample;
-      origin = "sample";
-    } else {
-      origin = "empty";
-    }
-  }
-
-  // Merge in human-added commercial-image confirmations (Phase 4).
-  const confirmations = await loadConfirmations();
-  for (const ev of events) {
-    const c = confirmations[ev.id];
-    if (c) ev.confirmation = c;
-  }
-
-  // Stable order: newest first for feeds.
-  events.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
-
-  const { imagery, imageryOrigin } = await loadImagery();
-
-  return { aois, events, origin, imagery, imageryOrigin };
-}
-
 function normalizeImagery(parsed: unknown): Record<string, AoiImagery> {
   if (parsed && typeof parsed === "object" && "aois" in parsed) {
     const aois = (parsed as { aois: unknown }).aois;
@@ -92,8 +68,7 @@ function normalizeImagery(parsed: unknown): Record<string, AoiImagery> {
   return {};
 }
 
-async function loadConfirmations(): Promise<Record<string, EventConfirmation>> {
-  const parsed = await readJson(CONFIRMATIONS_PATH);
+function normalizeConfirmations(parsed: unknown): Record<string, EventConfirmation> {
   if (parsed && typeof parsed === "object" && "byEventId" in parsed) {
     const map = (parsed as { byEventId: unknown }).byEventId;
     if (map && typeof map === "object") {
@@ -103,20 +78,38 @@ async function loadConfirmations(): Promise<Record<string, EventConfirmation>> {
   return {};
 }
 
-async function loadImagery(): Promise<{
-  imagery: Record<string, AoiImagery>;
-  imageryOrigin: DataOrigin;
-}> {
-  let imagery = normalizeImagery(await readJson(IMAGERY_PATH));
+export async function loadMonitorData(): Promise<MonitorData> {
+  // AOIs: a live (edited) config overrides the bundled seed; the seed is always
+  // present so this never throws.
+  const liveAois = await readLiveJson("aois.geojson");
+  const aois = (liveAois as AoiFeatureCollection | null) ?? (aoisSeed as AoiFeatureCollection);
+
+  // Events: live store -> bundled sample.
+  let events = normalizeEvents(await readLiveJson("events.json"));
+  let origin: DataOrigin = "live";
+  if (events.length === 0) {
+    events = normalizeEvents(eventsSample);
+    origin = events.length > 0 ? "sample" : "empty";
+  }
+
+  // Confirmations: live file -> bundled seed.
+  const confParsed = (await readLiveJson("confirmations.json")) ?? confirmationsSeed;
+  const confirmations = normalizeConfirmations(confParsed);
+  for (const ev of events) {
+    const c = confirmations[ev.id];
+    if (c) ev.confirmation = c;
+  }
+
+  // Stable order: newest first for feeds.
+  events.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+
+  // Imagery: live index -> bundled sample.
+  let imagery = normalizeImagery(await readLiveJson("imagery.json"));
   let imageryOrigin: DataOrigin = "live";
   if (Object.keys(imagery).length === 0) {
-    const sample = normalizeImagery(await readJson(IMAGERY_SAMPLE_PATH));
-    if (Object.keys(sample).length > 0) {
-      imagery = sample;
-      imageryOrigin = "sample";
-    } else {
-      imageryOrigin = "empty";
-    }
+    imagery = normalizeImagery(imagerySample);
+    imageryOrigin = Object.keys(imagery).length > 0 ? "sample" : "empty";
   }
-  return { imagery, imageryOrigin };
+
+  return { aois, events, origin, imagery, imageryOrigin };
 }
