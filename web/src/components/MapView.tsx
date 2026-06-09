@@ -105,9 +105,21 @@ export default function MapView({
       center: INITIAL_VIEW.center,
       zoom: INITIAL_VIEW.zoom,
       attributionControl: { compact: true },
+      // Render Japanese (CJK) label glyphs from local browser fonts instead of
+      // downloading them from the glyph server — the facility names are in
+      // Japanese, so this is what makes their labels appear.
+      localIdeographFontFamily:
+        "'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', sans-serif",
     });
     mapRef.current = map;
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
+
+    // Surface (rather than swallow) tile/glyph errors, and make sure one bad
+    // resource doesn't leave the whole map blank.
+    map.on("error", (e) => {
+      // eslint-disable-next-line no-console
+      console.warn("[map] resource error:", e?.error?.message ?? e);
+    });
 
     map.on("load", () => {
       map.addSource("aois", { type: "geojson", data: aois as never });
@@ -192,6 +204,9 @@ export default function MapView({
         source: "facilities",
         layout: {
           "text-field": ["get", "name_ja"],
+          // Latin fallback font from the glyphs endpoint; the Japanese glyphs
+          // come from local fonts (localIdeographFontFamily).
+          "text-font": ["Noto Sans Regular"],
           "text-size": 11,
           "text-offset": [0, 1.4],
           "text-anchor": "top",
@@ -235,9 +250,19 @@ export default function MapView({
         map.on("mouseenter", layer, () => (map.getCanvas().style.cursor = "pointer"));
         map.on("mouseleave", layer, () => (map.getCanvas().style.cursor = ""));
       }
+
+      // If the container wasn't fully sized when the map initialized (common
+      // with dynamic import + fl/grid layout), this paints it correctly.
+      map.resize();
     });
 
+    // Keep the GL canvas sized to its container — a 0-sized container at init
+    // is a classic cause of a blank map.
+    const resizeObserver = new ResizeObserver(() => map.resize());
+    resizeObserver.observe(containerRef.current);
+
     return () => {
+      resizeObserver.disconnect();
       map.remove();
       mapRef.current = null;
     };

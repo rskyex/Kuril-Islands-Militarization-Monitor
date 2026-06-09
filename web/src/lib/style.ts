@@ -20,6 +20,12 @@ export const AOI_LINE = "#38bdf8";
 // keeps the high-latitude Kuril chain legible against bright event markers.
 export const MAP_STYLE = {
   version: 8 as const,
+  // Glyphs are REQUIRED for the facility-label (symbol) layer to render; a
+  // style without this makes MapLibre error and can blank the map. This is a
+  // free, no-key public font endpoint. Japanese (CJK) glyphs are rendered from
+  // local browser fonts via `localIdeographFontFamily` (see MapView), so this
+  // endpoint is only needed for Latin glyphs.
+  glyphs: "https://fonts.openmaptiles.org/{fontstack}/{range}.pbf",
   sources: {
     osm: {
       type: "raster" as const,
@@ -30,6 +36,13 @@ export const MAP_STYLE = {
     },
   },
   layers: [
+    // Solid background so the AOI polygons and facility markers stay visible
+    // even when the raster tiles are slow or blocked on the deployed host.
+    {
+      id: "background",
+      type: "background" as const,
+      paint: { "background-color": "#0b1220" },
+    },
     {
       id: "osm",
       type: "raster" as const,
