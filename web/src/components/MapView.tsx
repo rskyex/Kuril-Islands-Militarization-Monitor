@@ -2,7 +2,7 @@
 
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ja } from "@/lib/i18n";
 import {
@@ -95,9 +95,22 @@ export default function MapView({
   const onSelectRef = useRef(onSelectAoi);
   onSelectRef.current = onSelectAoi;
 
+  // On-screen diagnostics (the browser console isn't always available). These
+  // reveal where the map breaks: container size at init, lifecycle phase, and
+  // the last resource error.
+  const [diag, setDiag] = useState({
+    phase: "初期化中…",
+    size: "?",
+    err: "" as string,
+  });
+
   // Initialize the map once.
   useEffect(() => {
     if (mapRef.current || !containerRef.current) return;
+
+    const el = containerRef.current;
+    const size = () => `${el.offsetWidth}×${el.offsetHeight}`;
+    setDiag((d) => ({ ...d, size: size() }));
 
     const map = new maplibregl.Map({
       container: containerRef.current,
@@ -117,11 +130,26 @@ export default function MapView({
     // Surface (rather than swallow) tile/glyph errors, and make sure one bad
     // resource doesn't leave the whole map blank.
     map.on("error", (e) => {
+      const msg = e?.error?.message ?? String(e?.type ?? "unknown");
       // eslint-disable-next-line no-console
-      console.warn("[map] resource error:", e?.error?.message ?? e);
+      console.warn("[map] resource error:", msg);
+      setDiag((d) => ({ ...d, err: msg.slice(0, 120) }));
     });
 
+    let loaded = false;
+    const loadTimer = setTimeout(() => {
+      if (!loaded) {
+        setDiag((d) => ({
+          ...d,
+          phase: "読込未完了（WebGL/worker の可能性）",
+          size: size(),
+        }));
+      }
+    }, 10000);
+
     map.on("load", () => {
+      loaded = true;
+      setDiag((d) => ({ ...d, phase: "読込完了", size: size() }));
       map.addSource("aois", { type: "geojson", data: aois as never });
       map.addSource("facilities", {
         type: "geojson",
@@ -262,6 +290,7 @@ export default function MapView({
     resizeObserver.observe(containerRef.current);
 
     return () => {
+      clearTimeout(loadTimer);
       resizeObserver.disconnect();
       map.remove();
       mapRef.current = null;
@@ -309,11 +338,32 @@ export default function MapView({
   }, [selectedAoiId, aois]);
 
   return (
-    <div
-      ref={containerRef}
-      className="map-pane__canvas"
-      role="region"
-      aria-label={ja.facilitiesHeading}
-    />
+    <>
+      <div
+        ref={containerRef}
+        className="map-pane__canvas"
+        role="region"
+        aria-label={ja.facilitiesHeading}
+      />
+      {/* Temporary on-screen diagnostics for the blank-map issue. */}
+      <div
+        style={{
+          position: "absolute",
+          left: 8,
+          bottom: 8,
+          zIndex: 20,
+          background: "rgba(0,0,0,0.7)",
+          color: "#e6edf6",
+          font: "11px/1.5 monospace",
+          padding: "4px 8px",
+          borderRadius: 6,
+          maxWidth: "70%",
+          pointerEvents: "none",
+        }}
+      >
+        地図状態: {diag.phase} ／ サイズ: {diag.size}
+        {diag.err && <div style={{ color: "#fca5a5" }}>err: {diag.err}</div>}
+      </div>
+    </>
   );
 }

@@ -40,8 +40,10 @@ export const MAP_STYLE = {
     // even when the raster tiles are slow or blocked on the deployed host.
     {
       id: "background",
+      // Deliberately distinct from the page background (#0b1220) so it's
+      // obvious whether MapLibre is painting at all.
       type: "background" as const,
-      paint: { "background-color": "#0b1220" },
+      paint: { "background-color": "#16384f" },
     },
     {
       id: "osm",
